@@ -2,6 +2,7 @@ using GeoSimplifier;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -24,61 +25,41 @@ namespace TestPart
                (336711, 4137924),
                (336505, 4137640),
             };
-
-
-        List<(double x, double y)> range_list = new()
-        {
-            (338000, 4160019),
-        };
-
         [Fact]
-        public void Test1()
+        public void IsFileEmpty()
         {
-
-            List<(double x, double y)> newList = ReadJson.ReadData();
-            List<(double x, double y)> pureList = LineSimplificator.SimplifyPoints(newList, 0, newList.Count - 1, 100);
-            pureList.Add((newList[newList.Count() - 1].x, newList[newList.Count() - 1].y));
-         
-//            Console.WriteLine("SadelestirilmisHat: ");
-
-            //List<(double x, double y)> TestSimplifiedList = new List<(double x, double y)>();
-
-            Assert.Equal(test_Simplify_List, pureList);
-
+            // Act and Assert
+            Assert.True(LineSimplificator.IsFileEmpty("testVerisi2.json"));
+        }
+        [Fact]
+        public void ExistenceOfEmptyValues()
+        {
+            // Act and Assert
+            Assert.True(LineSimplificator.IsNullValue("testVerisi2.json"));
+        }
+        [Fact]
+        public void ExistenceOfNegativeValue()
+        {
+            // Act and Assert
+            Assert.True(LineSimplificator.IsNegative("testVerisi2.json"));
 
         }
-        //[Fact]
-        //public void Test2()
-        //{
+        [Fact]
+        public void HasDuplicateCoordinates()
+        {
+            // Act and Assert
+            Assert.True(LineSimplificator.HasDuplicateCoordinates("testVerisi2.json"));
+        }
+        [Fact]
+        public void SimplificationSucceed()
+        {
 
-        //    List<(double x, double y)> newList = ReadJson.ReadData();
-        //    if (newList.Count == 0)
-        //    {
-        //        // Handle the case when the JSON data is empty.
-        //        // For example, you can throw an exception or log a message.
-        //        Assert.True(false, "JSON data is null or empty.");
-                
-        //    }
-        //    else
-        //    {
-        //        Program.simplyfied_list.Add((newList[0].x, newList[0].y));
-        //        Program.Simplify_points(newList, 0, newList.Count - 1);
-                
+            List<(double x, double y)> newList = LineSimplificator.ReadData("testVerisi2.json");
+            List<(double x, double y)> pureList = LineSimplificator.SimplifyPoints(newList, 0, newList.Count - 1, 100);
+            pureList.Add((newList[newList.Count() - 1].x, newList[newList.Count() - 1].y));
+            Assert.Equal(test_Simplify_List, pureList);
 
-        //        Program.simplyfied_list.Add((newList[newList.Count() - 1].x, newList[newList.Count() - 1].y));
-
-        //        Console.WriteLine("SadelestirilmisHat: ");
-
-        //        //List<(double x, double y)> TestSimplifiedList = new List<(double x, double y)>();
-
-        //        foreach (var point in Program.simplyfied_list)
-        //        {
-        //            Assert.InRange(point.x, 333414, 337160);
-        //            Assert.InRange(point.y, 4137640, 4160018);
-        //        }
-        //    }
-        //}
-
-
+        }
     }
-    }
+
+}
