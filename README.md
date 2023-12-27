@@ -3,7 +3,7 @@ Owners:
 
 Özkan Gezmiş
 
-Betül Karaman
+
 
 Yunus Emre Görgü
 
